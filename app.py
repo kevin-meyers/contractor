@@ -1,4 +1,5 @@
 import json
+import os
 
 from flask import Flask, render_template, request
 from pymongo import MongoClient
@@ -11,13 +12,9 @@ items = db.items
 app = Flask(__name__)
 
 
-with open('data/items.json') as f:
-    ITEMS_LIST = [json.loads(line) for line in f]
-
-
 @app.route('/')
 def home():
-    return render_template('base.html', items=ITEMS_LIST)
+    return render_template('base.html', items=items.find())
 
 @app.route('/items/<item_id>')
 def show_item(item_id):
