@@ -26,6 +26,7 @@ if not items.find_one():
 
 @app.route('/')
 def home():
+    print(str(list(items.find())))
     return render_template('base.html', items=list(items.find()))
 
 @app.route('/items/<item_id>')
