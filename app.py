@@ -4,7 +4,7 @@ import os
 from flask import Flask, render_template, request
 from pymongo import MongoClient
 
-if os.environ.get('IS_PROD', None):
+if not os.getenv('IS_PROD'):
     from dotenv import load_dotenv
     load_dotenv()
 
@@ -20,20 +20,18 @@ items = db.items
 app = Flask(__name__)
 
 
-#if not items.find_one():
-#    from add_items import add_items
-#    add_items()
+if not items.find_one():
+    from add_items import add_items
+    add_items()
 
 @app.route('/')
 def home():
-    return os.environ.get('MONGODB_PASSWORD', 'no password')
-#    return render_template('base.html', items=items.find())
+    return render_template('base.html', items=list(items.find()))
 
-#@app.route('/items/<item_id>')
-#def show_item(item_id):
-#    item = item
+@app.route('/items/<item_id>')
+def show_item(item_id):
+    item = item
 
 
 if __name__ == '__main__':
-  app.run(debug=True, host='0.0.0.0', port=os.environ.get('PORT', 5000))
-  
+    app.run(debug=True, host='0.0.0.0', port=os.getenv('PORT', 5000))
