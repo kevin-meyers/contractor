@@ -1,8 +1,9 @@
 import json
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from pymongo import MongoClient
+from bson import ObjectId
 
 if not os.getenv('IS_PROD'):
     from dotenv import load_dotenv
@@ -16,6 +17,7 @@ client = MongoClient(
 
 db = client.Contractor
 items = db.items
+cart = db.cart
 
 app = Flask(__name__)
 
@@ -26,13 +28,32 @@ if not items.find_one():
 
 @app.route('/')
 def home():
-    print(str(list(items.find())))
-    return render_template('base.html', items=list(items.find()))
+    return render_template('index.html', items=list(items.find()))
 
 @app.route('/items/<item_id>')
 def show_item(item_id):
-    item = item
+    item = items.find_one({'_id': ObjectId(item_id)})
 
+    return render_template('item.html', item=item)
+
+@app.route('/cart/<item_id>', methods=['POST'])
+def add_item_to_cart(item_id):
+    if cart.find_one({'_id': ObjectId(item_id)}):
+        cart.update_one(
+            {
+                {'_id': ObjectId(item_id)},
+                {'$inc': {'quantity': int(1)}}
+            }
+        ) 
+    else:
+        cart.insert_one({**items.find_one({'_id': ObjectId(item_id)}), **{'quantity': 1}})
+
+    return redirect(url_for('show_cart', items=list(cart.find())))
+
+
+@app.route('/cart')
+def show_cart():
+    return str(list(cart.find()))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=os.getenv('PORT', 5000))

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<div class='shopping-cart'>
+    <h1 style='text-align:left'>Shopping Cart</h1>
+    <!-- Write something to show if cart is empty -->
+
+    <table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Remove</th>
+
+        </tr>
+        {% for item in items %}
+            <tr>
+                <td>{{ item['name'] }}</td>
+                <td>1</td>
+                <td>{{ item['price'] }}</td>
+                <td>
+                    <a href='{{ url_for(delete, item_id=item["_id"]) }}' class='delete-btn'>
+                        <img src="/static/images/delete.png" alt="Remove Item" />
+                   
+                   </a>
+                
+                </td>
+            
+            </tr>
+       
+       {% endfor %}
+
+    </tbody>
+    
+    </table>
