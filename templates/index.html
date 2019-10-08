@@ -5,7 +5,7 @@
     {% for item in items %}
         <div class='item'>
             <h2><a href='/items/{{ item["_id"] }}'>{{ item['name'] }}</a><h2>
-            {% include 'add-to-cart.html' %}
+            {% include 'partials/add-to-cart.html' %}
         </div>
     {% endfor %}
 </div>

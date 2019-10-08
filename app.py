@@ -15,6 +15,7 @@ client = MongoClient(
     'cluster0-gwjng.mongodb.net/admin?retryWrites=true&w=majority', connect=False
 )
 
+
 db = client.Contractor
 items = db.items
 cart = db.cart
@@ -27,6 +28,11 @@ if not items.find_one():
     add_items()
 
 @app.route('/')
+def land():
+    cart.drop()
+    return redirect(url_for('home'))
+
+@app.route('/index')
 def home():
     return render_template('index.html', items=list(items.find()))
 
@@ -40,13 +46,11 @@ def show_item(item_id):
 def add_item_to_cart(item_id):
     if cart.find_one({'_id': ObjectId(item_id)}):
         cart.update_one(
-            {
-                {'_id': ObjectId(item_id)},
-                {'$inc': {'quantity': int(1)}}
-            }
+            {'_id': ObjectId(item_id)},
+            { '$inc': { 'quantity': 1 } }
         ) 
     else:
-        cart.insert_one({**items.find_one({'_id': ObjectId(item_id)}), **{'quantity': 1}})
+        cart.insert_one({ **items.find_one({ '_id': ObjectId(item_id) }), **{ 'quantity': 1 } })
 
     return redirect(url_for('show_cart', items=list(cart.find())))
 
