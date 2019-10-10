@@ -45,13 +45,15 @@ def show_item(item_id):
 
 @app.route('/cart/<item_id>', methods=['POST'])
 def add_item_to_cart(item_id):
+    quantity = request.form.get('quantity')
     if cart.find_one({'_id': ObjectId(item_id)}):
         cart.update_one(
             {'_id': ObjectId(item_id)},
-            { '$inc': { 'quantity': 1 } }
+            { '$inc': { 'quantity': int(quantity) } }
         )
     else:
-        cart.insert_one({ **items.find_one({ '_id': ObjectId(item_id) }), **{ 'quantity': 1 } })
+        cart.insert_one({ **items.find_one({ '_id': ObjectId(item_id) }), **{
+            'quantity': int(quantity) } })
 
     return redirect(url_for('show_cart', items=list(cart.find())))
 

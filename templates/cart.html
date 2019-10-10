@@ -18,7 +18,7 @@
         {% for item in items %}
             <tr>
                 <td>{{ item['name'] }}</td>
-		<td>{{ item['Quantity'] }}</td>
+		<td>{{ item['quantity'] }}</td>
                 <td>{{ item['price'] }}</td>
             
             </tr>
@@ -28,4 +28,9 @@
     </tbody>
     
     </table>
+
+<form action='/index'>
+    <input type='submit' value='Keep Shopping'>
+
+</form>
 {% endblock %}
