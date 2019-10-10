@@ -23,9 +23,10 @@ cart = db.cart
 app = Flask(__name__)
 
 
-if not items.find_one():
-    from add_items import add_items
-    add_items()
+#if not items.find_one():
+from add_items import add_items, drop_items
+drop_items()
+add_items()
 
 @app.route('/')
 def land():
@@ -48,7 +49,7 @@ def add_item_to_cart(item_id):
         cart.update_one(
             {'_id': ObjectId(item_id)},
             { '$inc': { 'quantity': 1 } }
-        ) 
+        )
     else:
         cart.insert_one({ **items.find_one({ '_id': ObjectId(item_id) }), **{ 'quantity': 1 } })
 
@@ -57,7 +58,7 @@ def add_item_to_cart(item_id):
 
 @app.route('/cart')
 def show_cart():
-    return str(list(cart.find()))
+    return render_template('cart.html', items=list(cart.find()))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=os.getenv('PORT', 5000))

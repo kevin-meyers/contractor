@@ -10,7 +10,7 @@ if not os.getenv('IS_PROD'):
 client = MongoClient(
     f'mongodb+srv://{os.getenv("MONGODB_USER")}:{os.getenv("MONGODB_PASSWORD")}@'
     'cluster0-gwjng.mongodb.net/admin?retryWrites=true&w=majority', connect=False
-) 
+)
 db = client.Contractor
 items = db.items
 

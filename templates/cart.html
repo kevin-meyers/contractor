@@ -18,15 +18,8 @@
         {% for item in items %}
             <tr>
                 <td>{{ item['name'] }}</td>
-                <td>1</td>
+		<td>{{ item['Quantity'] }}</td>
                 <td>{{ item['price'] }}</td>
-                <td>
-                    <a href='{{ url_for(delete, item_id=item["_id"]) }}' class='delete-btn'>
-                        <img src="/static/images/delete.png" alt="Remove Item" />
-                   
-                   </a>
-                
-                </td>
             
             </tr>
        
@@ -35,3 +28,4 @@
     </tbody>
     
     </table>
+{% endblock %}

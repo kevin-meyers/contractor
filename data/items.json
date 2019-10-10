@@ -1,3 +1,3 @@
-{"name": "Pillow", "price": 10, "description": "this is a pillow bruv"}
-{"name": "Twin Mattress", "price": 200, "description": "How much does a twin cost?"}
-{"name": "Blanket", "price": 20, "description": "Its worth the price I promise"}
+{"name": "Pillow", "price": 10, "description": "this is a pillow bruv", "url":"https://cdn.shopify.com/s/files/1/1496/9422/products/Single_Down_Alternative_Pillow__R1_copy_5R3-min_1024x.jpg?v=1541082234"}
+{"name": "Twin Mattress", "price": 200, "description": "How much does a twin cost?", "url": "https://www.serta.com/sites/ssb/serta.com/uploads/2019/2019-PS/Standale-II/Standale-II-PSPT-MO-800x520.png"}
+{"name": "Blanket", "price": 20, "description": "Its worth the price I promise", "url": "https://images-na.ssl-images-amazon.com/images/I/81Bzv6DiBBL._SX425_.jpg"}
