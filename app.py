@@ -62,5 +62,11 @@ def add_item_to_cart(item_id):
 def show_cart():
     return render_template('cart.html', items=list(cart.find()))
 
+
+@app.route('/cart/<item_id>/delete')
+def delete(item_id):
+    cart.remove({'_id': ObjectId(item_id)})
+    return redirect(url_for('show_cart'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=os.getenv('PORT', 5000))

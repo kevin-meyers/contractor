@@ -20,7 +20,11 @@
                 <td>{{ item['name'] }}</td>
 		<td>{{ item['quantity'] }}</td>
                 <td>{{ item['price'] }}</td>
-            
+		<td>
+		    <a href={{ url_for('.delete', item_id=item['_id']) }}>DELETE</a>
+
+		</td>
+           
             </tr>
        
        {% endfor %}
