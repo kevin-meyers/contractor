@@ -16,18 +16,22 @@
 
         </tr>
         {% for item in items %}
-            <tr>
-                <td>{{ item['name'] }}</td>
-		<td>{{ item['quantity'] }}</td>
-                <td>{{ item['price'] }}</td>
-		<td>
-		    <a href={{ url_for('.delete', item_id=item['_id']) }}>DELETE</a>
+	    {% if 'total' in item %}
+	    	<h4>Total: {{ item['total'] }}</h4>
 
-		</td>
+	    {% else %}
+                <tr>
+                    <td>{{ item['name'] }}</td>
+		    <td>{{ item['quantity'] }}</td>
+                    <td>{{ item['price'] }}</td>
+		    <td>
+		        <a href={{ url_for('.delete', item_id=item['_id']) }}>DELETE</a>
+
+		    </td>
            
-            </tr>
-       
-       {% endfor %}
+                </tr>
+            {% endif %}
+        {% endfor %}
 
     </tbody>
     

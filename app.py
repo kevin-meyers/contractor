@@ -5,6 +5,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from pymongo import MongoClient
 from bson import ObjectId
 
+from add_items import add_items, drop_items
+
 if not os.getenv('IS_PROD'):
     from dotenv import load_dotenv
     load_dotenv()
@@ -23,14 +25,12 @@ cart = db.cart
 app = Flask(__name__)
 
 
-#if not items.find_one():
-from add_items import add_items, drop_items
-drop_items()
-add_items()
-
 @app.route('/')
 def land():
+    drop_items()
+    add_items()
     cart.drop()
+    cart.insert_one({'name': 'total_price', 'total': 0})
     return redirect(url_for('home'))
 
 @app.route('/index')
@@ -45,15 +45,25 @@ def show_item(item_id):
 
 @app.route('/cart/<item_id>', methods=['POST'])
 def add_item_to_cart(item_id):
-    quantity = request.form.get('quantity')
-    if cart.find_one({'_id': ObjectId(item_id)}):
+    quantity = int(request.form.get('quantity'))
+    item = cart.find_one({'_id': ObjectId(item_id)})
+    if item:
         cart.update_one(
             {'_id': ObjectId(item_id)},
-            { '$inc': { 'quantity': int(quantity) } }
+            { '$inc': { 'quantity': quantity } }
         )
+        cart.update_one(
+            {'name': 'total_price'},
+            { '$inc': { 'total': quantity * item['price'] } }
+        )
+
     else:
-        cart.insert_one({ **items.find_one({ '_id': ObjectId(item_id) }), **{
-            'quantity': int(quantity) } })
+        item = items.find_one({ '_id': ObjectId(item_id) })
+        cart.insert_one({ **item, **{'quantity': quantity } })
+        cart.update_one(
+            {'name': 'total_price'},
+            {'$inc': {'total': quantity * item['price']}}
+        )
 
     return redirect(url_for('show_cart', items=list(cart.find())))
 
